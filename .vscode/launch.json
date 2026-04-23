@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug with Auto Attach",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/index.ts",
+            "runtimeArgs": ["--require", "ts-node/register"],
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/.env",
+            "skipFiles": ["<node_internals>/**"]
+        }
+    ]
+}
