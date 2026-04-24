@@ -15,3 +15,5 @@ export const DB_CONFIG = {
         encrypt: false, // Set to true if you need encryption
     }
 };
+
+export const JWT_SECRET = process.env.JWT_SECRET;
