@@ -3,30 +3,22 @@ import { prismaClient } from "..";
 import { compareSync, hashSync } from "bcrypt";
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from "../../secrets";
+import { BadRequestException } from "../exceptions/bad-requests";
+import { ErrorCode } from "../exceptions/root";
 
 export const signUp = async (req: Request, res: Response) => {
 
     try {
         const { email, password, name } = req.body;
-
-        console.log("trying to find the user with existing email")
-
         let user = await prismaClient.user.findFirst({ where: { email } });
-
         if (user) {
-            res.status(400).send('User already exists');
+            throw new BadRequestException("User already exists", ErrorCode.USER_ALREADY_EXISTS, "A user with the provided email already exists");
         }
-
-        console.log("User not found so creating a new user");
-
         user = await prismaClient.user.create({
             data: {
                 email, password: hashSync(password, 10), name
             }
         });
-
-        console.log(`${user} is created successfully`);
-
         res.json({
             data: {
                 id: user.id, email: user.email, name: user.name
@@ -34,6 +26,9 @@ export const signUp = async (req: Request, res: Response) => {
         });
 
     } catch (error) {
+        if (error instanceof BadRequestException) {
+            
+        }
         console.error('Error during user registration:', error);
         res.status(500).json({ message: 'Internal server error', success: false });
     }
@@ -45,10 +40,10 @@ export const login = async (req: Request, res: Response) => {
     let user = await prismaClient.user.findFirst({ where: { email } });
 
     if (!user) {
-        res.status(400).send('User does not exist');
+        throw new BadRequestException("User does not exist", ErrorCode.USER_NOT_FOUND, "No user found with the provided email");
     }
     if (!compareSync(password, user!.password)) {
-        res.status(400).send('Invalid password');
+        throw new BadRequestException("Invalid password", ErrorCode.INVALID_CREDENTIALS, "The provided password is incorrect");
     }
 
     const token = jwt.sign({ id: user!.id, email: user!.email }, JWT_SECRET!);
