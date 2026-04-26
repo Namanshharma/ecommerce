@@ -8,9 +8,9 @@ import { errorMiddleware } from './middlewares/errors';
 const app: Express = express()
 app.use(express.json());
 
-console.log("DATABASE_URL exists?", !!process.env.DATABASE_URL);
-console.log("DATABASE_URL value:", process.env.DATABASE_URL);
-console.log(DB_CONFIG);
+// console.log("DATABASE_URL exists?", !!process.env.DATABASE_URL);
+// console.log("DATABASE_URL value:", process.env.DATABASE_URL);
+// console.log(DB_CONFIG);
 
 const adapter = new PrismaMssql(DB_CONFIG);
 export const prismaClient = new PrismaClient({
@@ -19,9 +19,7 @@ export const prismaClient = new PrismaClient({
 });
 
 app.use('/api', rootRouter);
-
 app.use(errorMiddleware);
-
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
 });
