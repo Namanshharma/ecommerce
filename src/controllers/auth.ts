@@ -3,10 +3,9 @@ import { prismaClient } from "..";
 import { compareSync, hashSync } from "bcrypt";
 import * as jwt from 'jsonwebtoken';
 import { JWT_SECRET } from "../../secrets";
-import { BadRequestException } from "../exceptions/bad-requests";
 import { ErrorCode } from "../exceptions/root";
-import { UnProcessableEntityException } from "../exceptions/validations";
 import { LoginSchema, SignUpSchema } from "../schema/users";
+import { BadRequestException, UnProcessableEntityException } from "../exceptions/exception-Handler";
 
 export const signUp = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -14,7 +13,7 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
         const { email, password, name } = req.body;
         let user = await prismaClient.user.findFirst({ where: { email } });
         if (user) {
-            next(new BadRequestException("User already exists", ErrorCode.USER_ALREADY_EXISTS, "A user with the provided email already exists"));
+            new BadRequestException("User already exists", ErrorCode.USER_ALREADY_EXISTS, "A user with the provided email already exists");
             return;
         }
         user = await prismaClient.user.create({
@@ -28,7 +27,7 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
             }, Message: 'User created successfully', Success: true
         });
     } catch (error: any) {
-        next(new UnProcessableEntityException(422, ErrorCode.VALIDATION_ERROR, "Invalid input data", error?.issues));
+        new UnProcessableEntityException(ErrorCode.VALIDATION_ERROR, "Invalid input data", error?.issues);
     }
 }
 
@@ -38,11 +37,11 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         const { email, password } = req.body;
         let user = await prismaClient.user.findFirst({ where: { email } });
         if (!user) {
-            next(new BadRequestException("User does not exist", ErrorCode.USER_NOT_FOUND, "No user found with the provided email"));
+            new BadRequestException("User does not exist", ErrorCode.USER_NOT_FOUND, "No user found with the provided email");
             return;
         }
         if (!compareSync(password, user!.password)) {
-            next(new BadRequestException("Invalid password", ErrorCode.INVALID_CREDENTIALS, "The provided password is incorrect"));
+            new BadRequestException("Invalid password", ErrorCode.INVALID_CREDENTIALS, "The provided password is incorrect");
             return;
         }
         const token = jwt.sign({ id: user!.id, email: user!.email }, JWT_SECRET!);
@@ -52,10 +51,10 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
             }, Token: token, Message: 'Login successful', Success: true
         });
     } catch (error: any) {
-        next(new UnProcessableEntityException(422, ErrorCode.VALIDATION_ERROR, "Invalid input data", error?.issues));
+        new UnProcessableEntityException(ErrorCode.VALIDATION_ERROR, "Invalid input data", error?.issues);
     }
 }
 
-export const register = (req: Request, res: Response, next: NextFunction) => {
+export const me = (req: Request, res: Response, next: NextFunction) => {
     res.send('Register route');
 }
