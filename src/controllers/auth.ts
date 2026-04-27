@@ -22,7 +22,7 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
             }
         });
         res.status(201).json({
-            data: {
+            Data: {
                 Id: user.id, Email: user.email, Name: user.name
             }, Message: 'User created successfully', Success: true
         });
@@ -46,7 +46,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         }
         const token = jwt.sign({ id: user!.id, email: user!.email }, JWT_SECRET!);
         res.status(200).json({
-            data: {
+            Data: {
                 Name: user?.name, Email: user?.email
             }, Token: token, Message: 'Login successful', Success: true
         });
@@ -55,6 +55,10 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     }
 }
 
-export const me = (req: Request, res: Response, next: NextFunction) => {
-    res.send('Register route');
+export const me = async (request: Request, response: Response, next: NextFunction) => {
+    response.status(200).json({
+        Data: {
+            Id: request.user?.id, Name: request.user?.name, Email: request.user?.email
+        }, Message: "User Details fetched successfully", Success: true
+    });
 }

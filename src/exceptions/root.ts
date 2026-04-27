@@ -21,4 +21,5 @@ export enum ErrorCode {
     INTERNAL_SERVER_ERROR = 1004,
     BAD_REQUEST = 1005,
     VALIDATION_ERROR = 1006,
+    UNAUTHORIZED = 1007
 }
