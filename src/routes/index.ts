@@ -5,4 +5,5 @@ const rootRouter: Router = Router();
 
 rootRouter.use('/auth', authRouter)
 
+
 export default rootRouter;

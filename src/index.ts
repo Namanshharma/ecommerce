@@ -9,24 +9,14 @@ import './types/express-augmentation';
 const app: Express = express()
 app.use(express.json());
 
-const adapter = new PrismaMssql(DB_CONFIG);     // this line tells prisma - How to connect to the DB by using the Confingurations provided in the secrets file. 
+// this line tells prisma - How to connect to the DB by using the Confingurations provided in the secrets file. 
 // It also tells prisma to use the MSSQL adapter for connecting to the database.
+const adapter = new PrismaMssql(DB_CONFIG);
 
 export const prismaClient = new PrismaClient({
     log: ['query'],     // This line enables logging of all database queries executed by the Prisma Client.
     adapter,            // This line tells the Prisma Client to use the MSSQL adapter for database operations.
 })
-// .$extends({           // Example of extending the Prisma Client with a custom method
-//     query: {
-//         user: {         // This block defines a custom query extension for the 'user' model in Prisma.
-//             create({ args, query }) {
-//                 console.log("Creating user with args:", args);
-//                 args.data = SignUpSchema.parse(args.data);                  // Validate input data against the schema
-//                 return query(args);
-//             }
-//         }
-//     }
-// });
 
 app.use('/api', rootRouter);
 
