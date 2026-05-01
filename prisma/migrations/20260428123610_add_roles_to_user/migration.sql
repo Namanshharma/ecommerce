@@ -4,7 +4,7 @@ BEGIN TRAN;
 
 -- AlterTable
 ALTER TABLE [dbo].[users] ADD [isActive] BIT NOT NULL CONSTRAINT [users_isActive_df] DEFAULT 1,
-[role] NVARCHAR(20) NOT NULL CONSTRAINT [users_role_df] DEFAULT 'USER';
+[role] NVARCHAR(1000) NOT NULL CONSTRAINT [users_role_df] DEFAULT 'USER';
 
 COMMIT TRAN;
 
