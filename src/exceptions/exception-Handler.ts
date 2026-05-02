@@ -23,3 +23,9 @@ export class UnAuthorizedException extends HttpException {
         super(401, errorCode, actualError, errorMessage);
     }
 }
+
+export class NotFoundException extends HttpException {
+    constructor(errorCode: ErrorCode, actualError: string, errorMessage: string) {
+        super(404, errorCode, actualError, errorMessage);
+    }
+}
