@@ -27,3 +27,13 @@ export const authMiddleware = async (request: Request, response: Response, next:
         next(new UnAuthorizedException(ErrorCode.UNAUTHORIZED, "Unauthorized: Invalid token", "The provided token is invalid"));
     }
 }
+
+
+export const adminMiddleware = async (request: Request, response: Response, next: NextFunction) => {
+    const user = request.user;
+    if (!user || user.role !== 'ADMIN') {
+        next(new UnAuthorizedException(ErrorCode.UNAUTHORIZED, "Unauthorized: Admin access required", "You must be an admin to access this resource"));
+        return;
+    }
+    next();
+}
