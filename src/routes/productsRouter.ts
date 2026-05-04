@@ -6,7 +6,7 @@ import { adminMiddleware, authMiddleware } from "../middlewares/auth";
 const productsRouter: Router = Router();
 
 productsRouter.post('/createProduct', [authMiddleware, adminMiddleware], errorHandler(createProduct));
-productsRouter.post('/updateProduct', errorHandler(updateProduct));
+productsRouter.post('/updateProduct', [authMiddleware, adminMiddleware], errorHandler(updateProduct));
 productsRouter.post('/deleteProduct', [authMiddleware, adminMiddleware], errorHandler(deleteProduct));
 productsRouter.post('/getProductById', [authMiddleware, adminMiddleware], errorHandler(getProductById));
 productsRouter.post('/getAllProducts', [authMiddleware, adminMiddleware], errorHandler(getAllProducts));
