@@ -43,6 +43,7 @@ model Address {
   pinCode  Int     @db.Int
   userId   Int
   user     User    @relation(fields: [userId], references: [id])
+  isActive Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

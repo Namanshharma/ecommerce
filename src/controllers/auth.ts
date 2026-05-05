@@ -14,7 +14,7 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
     const { email, password, name } = req.body;
     let user = await prismaClient.user.findFirst({ where: { email } });
     if (user) {
-        new BadRequestException("User already exists", ErrorCode.USER_ALREADY_EXISTS, "A user with the provided email already exists");
+        new BadRequestException(ErrorCode.USER_ALREADY_EXISTS, "User already exists", "A user with the provided email already exists");
         return;
     }
     user = await prismaClient.user.create({
@@ -34,11 +34,11 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const { email, password } = req.body;
     let user = await prismaClient.user.findFirst({ where: { email } });
     if (!user) {
-        new BadRequestException("User does not exist", ErrorCode.USER_NOT_FOUND, "No user found with the provided email");
+        new BadRequestException(ErrorCode.USER_NOT_FOUND, "User does not exist", "No user found with the provided email");
         return;
     }
     if (!compareSync(password, user!.password)) {
-        new BadRequestException("Invalid password", ErrorCode.INVALID_CREDENTIALS, "The provided password is incorrect");
+        new BadRequestException(ErrorCode.INVALID_CREDENTIALS, "Invalid password", "The provided password is incorrect");
         return;
     }
     const token = jwt.sign({ id: user!.id, email: user!.email }, JWT_SECRET!);
@@ -63,11 +63,11 @@ export const assignAdminRole = async (request: Request, response: Response, next
     const { email, password } = request.body;
     const user = await prismaClient.user.findFirst({ where: { email } });
     if (!user) {
-        new BadRequestException("User does not exist", ErrorCode.USER_NOT_FOUND, "No user found with the provided email");
+        new BadRequestException(ErrorCode.USER_NOT_FOUND, "User does not exist", "No user found with the provided email");
         return;
     }
     if (!compareSync(password, user.password)) {
-        new BadRequestException("Invalid password", ErrorCode.INVALID_CREDENTIALS, "The provided password is incorrect");
+        new BadRequestException(ErrorCode.INVALID_CREDENTIALS, "Invalid password", "The provided password is incorrect");
         return;
     }
     await prismaClient.user.update({ where: { email }, data: { role: Role.ADMIN } });
@@ -82,7 +82,7 @@ export const deleteUser = async (request: Request, response: Response, next: Nex
 
     const user = await prismaClient.user.findFirst({ where: { email } });
     if (!user) {
-        new BadRequestException("User does not exist", ErrorCode.USER_NOT_FOUND, "No user found with the provided email");
+        new BadRequestException(ErrorCode.USER_NOT_FOUND, "User does not exist", "No user found with the provided email");
         return;
     }
     await prismaClient.user.update({ where: { email }, data: { isActive: false } });
