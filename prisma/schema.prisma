@@ -8,14 +8,15 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String
-  role      String   @default("USER")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  isActive  Boolean  @default(true)
+  role      String    @default("USER")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  isActive  Boolean   @default(true)
+  addresses Address[]
 
   @@map("users")
 }
@@ -31,4 +32,20 @@ model Product {
   isActive    Boolean  @default(true)
 
   @@map("products")
+}
+
+model Address {
+  id       Int     @id @default(autoincrement())
+  address1 String
+  address2 String?
+  city     String  @db.NVarChar(10)
+  country  String  @db.NVarChar(10)
+  pinCode  Int     @db.Int
+  userId   Int
+  user     User    @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("address")
 }

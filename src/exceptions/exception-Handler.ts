@@ -7,7 +7,7 @@ export class InternalException extends HttpException {
 }
 
 export class BadRequestException extends HttpException {
-    constructor(errorMessage: string, errorCode: ErrorCode, actualError: string) {
+    constructor(errorCode: ErrorCode, actualError: string, errorMessage: string) {
         super(400, errorCode, actualError, errorMessage);
     }
 }
