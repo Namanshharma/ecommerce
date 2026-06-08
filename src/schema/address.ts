@@ -5,5 +5,6 @@ export const addAddressSchema = z.object({
     address2: z.string().nullable(),
     city: z.string().min(3, "Please enter valid City name"),
     country: z.string().min(3, "Please enter valid Country name"),
-    pincode: z.number()
+    pincode: z.number(),
+    userId: z.number()
 });

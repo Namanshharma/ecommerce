@@ -5,6 +5,6 @@ import { adminMiddleware, authMiddleware } from "../middlewares/auth";
 
 export const addressRouter: Router = Router();
 
-addressRouter.post("/addAddress", [authMiddleware, adminMiddleware], errorHandler(addAddress));
+addressRouter.post("/addAddress", errorHandler(addAddress));
 addressRouter.delete("/deleteAddress/:id", [authMiddleware, adminMiddleware], errorHandler(deleteAddress));
 addressRouter.get("/listAllAddresses", errorHandler(listAllAddresses));
