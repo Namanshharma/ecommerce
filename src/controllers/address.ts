@@ -3,13 +3,14 @@ import { prismaClient } from "..";
 import { addAddressSchema } from "../schema/address";
 import { NotFoundException } from "../exceptions/exception-Handler";
 import { ErrorCode } from "../exceptions/root";
-import { Address, User } from "../generated/prisma/client";
+import { User } from "../generated/prisma/client";
 
 export const addAddress = async (request: Request, response: Response, next: NextFunction) => {
     addAddressSchema.parse(request.body);
     let address;
+    let userInfo: User;
     try {
-        const userInfo: User = await prismaClient.user.findFirstOrThrow({ where: { id: request.body.userId } })
+        userInfo = await prismaClient.user.findFirstOrThrow({ where: { id: request.body.userId } })
         address = await prismaClient.address.create({
             data: {
                 ...request.body, userId: userInfo.id
@@ -25,9 +26,7 @@ export const addAddress = async (request: Request, response: Response, next: Nex
 }
 
 export const deleteAddress = async (request: Request, response: Response, next: NextFunction) => {
-
 }
 
-export const listAddress = async (request: Request, response: Response, next: NextFunction) => {
-
+export const listAllAddresses = async (request: Request, response: Response, next: NextFunction) => {
 }
