@@ -10,7 +10,10 @@ const app: Express = express()
 app.use(express.json());
 
 app.get('/', (req: Request, res: Response) => {
-    res.send("Hi, From Container");
+    res.json({
+        "Message": "Hi, from Docker Container",
+        "Success": true
+    });
 })
 
 // this line tells prisma - How to connect to the DB by using the Confingurations provided in the secrets file. 
